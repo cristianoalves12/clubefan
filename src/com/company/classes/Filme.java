@@ -7,18 +7,26 @@ public class Filme {
 
     private String nome;
     private String nomeOriginal;
-    private List<String> horario = new ArrayList<>();
-    private List<String> sala = new ArrayList<>();
     private String diretor;
     private int anoLancamento;
+    private String tipo;
+    private String sinopse;
 
-    public Filme(String nome, String nomeOriginal, List<String> horario, List<String> sala, String diretor, int anoLancamento) {
+    public Filme(String nome, String diretor, int anoLancamento, String tipo, String sinopse) {
         this.nome = nome;
-        this.nomeOriginal = nomeOriginal;
-        this.horario = horario;
-        this.sala = sala;
         this.diretor = diretor;
         this.anoLancamento = anoLancamento;
+        this.tipo = tipo;
+        this.sinopse = sinopse;
+    }
+
+    public Filme(String nome, String nomeOriginal, String diretor, int anoLancamento, String tipo, String sinopse) {
+        this.nome = nome;
+        this.nomeOriginal = nomeOriginal;
+        this.diretor = diretor;
+        this.anoLancamento = anoLancamento;
+        this.tipo = tipo;
+        this.sinopse = sinopse;
     }
 
     public String getNome() {
@@ -37,22 +45,6 @@ public class Filme {
         this.nomeOriginal = nomeOriginal;
     }
 
-    public List<String> getHorario() {
-        return horario;
-    }
-
-    public void setHorario(List<String> horario) {
-        this.horario = horario;
-    }
-
-    public List<String> getSala() {
-        return sala;
-    }
-
-    public void setSala(List<String> sala) {
-        this.sala = sala;
-    }
-
     public String getDiretor() {
         return diretor;
     }
@@ -67,5 +59,31 @@ public class Filme {
 
     public void setAnoLancamento(int anoLancamento) {
         this.anoLancamento = anoLancamento;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
+    @Override
+    public String toString() {
+        return nome + '\n' +
+               diretor + '\n' +
+               anoLancamento  + '\n' +
+               tipo + '\n' +
+               sinopse + '\n' +
+                '\n';
     }
 }

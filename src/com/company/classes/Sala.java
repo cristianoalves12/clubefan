@@ -1,7 +1,7 @@
 package com.company.classes;
 
-public class Sala {
-    protected String nome;
+public class Sala{
+    private String nome;
     private int capacidade;
 
     public Sala(String nome, int capacidade) {
