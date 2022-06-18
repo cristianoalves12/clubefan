@@ -20,19 +20,28 @@ public class Main {
 
     public static void cadastrarFilmes(){
         System.out.println("Digite os dados do filme");
-        System.out.print("Nome:");
+        System.out.print("Nome: ");
         String nome = sc.next();
         sc.nextLine();
-        System.out.print("Diretor:");
+        System.out.print("Diretor: ");
         String diretor = sc.next();
         sc.nextLine();
-        System.out.print("Ano de Lançamento:");
+        System.out.print("Ano de Lançamento: ");
         int anoLanc = sc.nextInt();
+        while (ValidarFilme(listFilme, nome, anoLanc)) {
+            System.out.println("O FILME " + nome + " lançado em " + anoLanc +" JÁ ESTÁ CADASTRADO NA LISTA, FAVOR INFORMAR OUTRO: ");
+            System.out.print("Nome: ");
+            nome = sc.next();
+            sc.nextLine();
+            System.out.print("Ano de Lançamento: ");
+            anoLanc = sc.nextInt();
+        }
         sc.nextLine();
-        System.out.print("Tipo:");
+
+        System.out.print("Tipo: ");
         String tipo = sc.next();
         sc.nextLine();
-        System.out.print("Sinopse:");
+        System.out.print("Sinopse: ");
         String sinopse = sc.nextLine();
 
         listFilme.add(new Filme(nome, diretor, anoLanc, tipo, sinopse));
@@ -65,9 +74,22 @@ public class Main {
                         } while (opList == 1);
                     }
 
-                    if (opCrud == 2){
+                    if (opCrud == 2) {
+                        System.out.println("INFORME O FILME QUE DESEJA REMOVER: ");
+                        int filmeRem = sc.nextInt();
+                        Filme filme = listFilme.stream().filter(x -> x.getNome().equals(filmeRem)).findFirst().orElse(null);
+
+                        if (filme == null) {
+                            System.out.println("FUNCIONÁRIO NÃO EXISTE NA LISTAGEM!");
+                        } else {
+                            //listFilme.remove(listFilme.indexOf(filme)); remoção com erro
+                        }
+                    }
+
+                    if (opCrud == 3) {
                         System.out.println(listFilme);
                     }
+
                     System.out.println("1-Adcionar um filme");
                     System.out.println("2-Deletar um filme");
                     System.out.println("3-Listar filmes");
@@ -82,5 +104,10 @@ public class Main {
             }
 
         } while (opMenuGeral != 0);
+    }
+    public static boolean ValidarFilme(List<Filme> listFilme, String nome, int anoLanc) {
+        Filme filme = listFilme.stream().filter(x -> x.getNome().equals(nome) && x.getAnoLancamento() == anoLanc).findFirst().orElse(null);
+        return filme != null;
+
     }
 }

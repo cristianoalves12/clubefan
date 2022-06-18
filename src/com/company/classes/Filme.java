@@ -83,7 +83,6 @@ public class Filme {
                diretor + '\n' +
                anoLancamento  + '\n' +
                tipo + '\n' +
-               sinopse + '\n' +
-                '\n';
+               sinopse + '\n' + '\n';
     }
 }
