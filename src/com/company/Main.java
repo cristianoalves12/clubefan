@@ -76,13 +76,15 @@ public class Main {
 
                     if (opCrud == 2) {
                         System.out.println("INFORME O FILME QUE DESEJA REMOVER: ");
-                        int filmeRem = sc.nextInt();
+                        String filmeRem = sc.next();
+
                         Filme filme = listFilme.stream().filter(x -> x.getNome().equals(filmeRem)).findFirst().orElse(null);
 
                         if (filme == null) {
-                            System.out.println("FUNCIONÁRIO NÃO EXISTE NA LISTAGEM!");
+                            System.out.println("FILME NÃO ESTÁ CADASTRADO!");
                         } else {
-                            //listFilme.remove(listFilme.indexOf(filme)); remoção com erro
+                            listFilme.remove(filme);
+                            System.out.println("Filme deletado");
                         }
                     }
 
