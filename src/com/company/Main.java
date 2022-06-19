@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.classes.Filme;
 import com.company.classes.Sala;
+import com.company.classes.Sessao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Main {
 
     static List<Filme> listFilme = new ArrayList<>();
     static List<Sala> listSala = new ArrayList<>();
+    static List<Sessao> listSessao = new ArrayList<>();
 
     public static void listarFilmes(){
         for(Filme filme : listFilme){
@@ -70,13 +72,16 @@ public class Main {
         System.out.println("Digite os dados da sessão");
         listarFilmes();
         System.out.print("Filme: ");
-        String nome = sc.next();
+        String nFilme = sc.next();
         sc.nextLine();
-
+        Filme filme = listFilme.stream().filter(x -> x.getNome().equals(nFilme)).findFirst().orElse(null);
         System.out.print("Sala: ");
-        String sala = sc.next();
+        System.out.println(listSala);
+        String nSala = sc.next();
         sc.nextLine();
+        Sala sala = listSala.stream().filter(x -> x.getNome().equals(nSala)).findFirst().orElse(null);
 
+        listSessao.add(new Sessao(filme, sala));
     }
 
 
@@ -193,7 +198,9 @@ public class Main {
 
             }
 
-            if (opMenuGeral == 2) {
+            if (opMenuGeral == 3) {
+                cadastrarSessao();
+                System.out.println(listSessao);
 
             }
 
