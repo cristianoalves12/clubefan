@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.classes.Filme;
+import com.company.classes.Sala;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
 
     static List<Filme> listFilme = new ArrayList<>();
+    static List<Sala> listSala = new ArrayList<>();
 
     public static void listarFilmes(){
         for(Filme filme : listFilme){
@@ -47,6 +49,37 @@ public class Main {
         listFilme.add(new Filme(nome, diretor, anoLanc, tipo, sinopse));
     }
 
+    public static void cadastrarSala(){
+        System.out.println("Digite os dados da sala");
+        System.out.print("Nome: ");
+        String nome = sc.next();
+        sc.nextLine();
+        System.out.print("Capacidade: ");
+        int capacidade = sc.nextInt();
+        while (ValidarSala(listSala, nome)) {
+            System.out.println("A SALA " + nome + " JÁ ESTÁ CADASTRADA NA LISTA, FAVOR INFORMAR OUTRA: ");
+            System.out.print("Nome: ");
+            nome = sc.next();
+            sc.nextLine();
+        }
+
+        listSala.add(new Sala(nome, capacidade));
+    }
+
+    public static void cadastrarSessao(){
+        System.out.println("Digite os dados da sessão");
+        listarFilmes();
+        System.out.print("Filme: ");
+        String nome = sc.next();
+        sc.nextLine();
+
+        System.out.print("Sala: ");
+        String sala = sc.next();
+        sc.nextLine();
+
+    }
+
+
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
         int opMenuGeral;
@@ -60,12 +93,12 @@ public class Main {
             opMenuGeral = sc.nextInt();
 
             if (opMenuGeral == 1) {
-                System.out.println("1-Adcionar um filme");
-                System.out.println("2-Deletar um filme");
-                System.out.println("3-Listar filmes");
-                System.out.println("0-Voltar");
-                opCrud = sc.nextInt();
                 do {
+                    System.out.println("1-Adcionar filme");
+                    System.out.println("2-Deletar um filme");
+                    System.out.println("3-Listar filmes");
+                    System.out.println("0-Voltar");
+                    opCrud = sc.nextInt();
                     if (opCrud == 1) {
                         do {
                             cadastrarFilmes();
@@ -91,18 +124,77 @@ public class Main {
                     if (opCrud == 3) {
                         System.out.println(listFilme);
                     }
-
-                    System.out.println("1-Adcionar um filme");
-                    System.out.println("2-Deletar um filme");
-                    System.out.println("3-Listar filmes");
-                    System.out.println("0-Voltar");
-                    opCrud = sc.nextInt();
                 }while (opCrud != 0);
 
             }
 
             if (opMenuGeral == 2) {
-                listarFilmes();
+                do {
+                    System.out.println("1-Adcionar sala");
+                    System.out.println("2-Deletar uma sala");
+                    System.out.println("3-Listar salas");
+                    System.out.println("4-Alterar sala");
+                    System.out.println("0-Voltar");
+                    opCrud = sc.nextInt();
+                    if (opCrud == 1) {
+                        do {
+                            cadastrarSala();
+                            System.out.println("Deseja adicionar outra sala? [1]Sim [2]Não");
+                            opList = sc.nextInt();
+                        } while (opList == 1);
+                    }
+
+                    if (opCrud == 2) {
+                        do {
+                            System.out.println("INFORME O SALA QUE DESEJA REMOVER: ");
+                            String salaRem = sc.next();
+
+                            Sala sala = listSala.stream().filter(x -> x.getNome().equals(salaRem)).findFirst().orElse(null);
+
+                            if (sala == null) {
+                                System.out.println("SALA NÃO ESTÁ CADASTRADA!");
+                            } else {
+                                listSala.remove(sala);
+                                System.out.println("Sala deletada");
+                            }
+                            System.out.println("Deseja remover outra sala? [1]Sim [2]Não");
+                            opList = sc.nextInt();
+                        } while (opList == 1);
+                    }
+
+                    if (opCrud == 3) {
+                        System.out.println(listSala);
+                    }
+
+                    if (opCrud == 4) {
+                        do{
+                        System.out.println("INFORME A SALA QUE DESEJA ALTERAR: ");
+                        String salaAlt = sc.next();
+
+                        Sala sala = listSala.stream().filter(x -> x.getNome().equals(salaAlt)).findFirst().orElse(null);
+                            if (sala == null) {
+                                System.out.println("SALA NÃO ESTÁ CADASTRADA!");
+                            } else {
+                                System.out.println("INFORME O NOVO NOME: ");
+                                String novoNome = sc.next();
+                                sala.setNome(novoNome);
+                                System.out.println("INFORME A NOVA CAPACIDADE: ");
+                                String novoCapacidade = sc.next();
+                                sala.setNome(novoCapacidade);
+                                System.out.println("Sala alterada");
+                            }
+
+                            System.out.println("Deseja alterar outra sala? [1]Sim [2]Não");
+                            opList = sc.nextInt();
+                        } while (opList == 1);
+                    }
+
+                }while (opCrud != 0);
+
+            }
+
+            if (opMenuGeral == 2) {
+
             }
 
         } while (opMenuGeral != 0);
@@ -110,6 +202,10 @@ public class Main {
     public static boolean ValidarFilme(List<Filme> listFilme, String nome, int anoLanc) {
         Filme filme = listFilme.stream().filter(x -> x.getNome().equals(nome) && x.getAnoLancamento() == anoLanc).findFirst().orElse(null);
         return filme != null;
+    }
 
+    public static boolean ValidarSala(List<Sala> listSala, String nome) {
+        Sala sala = listSala.stream().filter(x -> x.getNome().equals(nome)).findFirst().orElse(null);
+        return sala != null;
     }
 }
