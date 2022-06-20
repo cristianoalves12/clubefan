@@ -79,10 +79,10 @@ public class Filme {
 
     @Override
     public String toString() {
-        return nome + '\n' +
-               diretor + '\n' +
-               anoLancamento  + '\n' +
-               tipo + '\n' +
-               sinopse + '\n' + '\n';
+        return  "Nome do filme: " + nome + '\n' +
+                "Diretor : " + diretor + '\n' +
+                "Ano de lançamento: " + anoLancamento  + '\n' +
+                "Tipo: " + tipo + '\n' +
+                "Sinopse: " + sinopse + '\n' + '\n';
     }
 }

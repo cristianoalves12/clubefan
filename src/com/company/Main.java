@@ -58,6 +58,12 @@ public class Main {
         sc.nextLine();
         System.out.print("Capacidade: ");
         int capacidade = sc.nextInt();
+        System.out.println("Horário: ");
+        int horario = sc.nextInt();
+            while(horario < 13 || horario > 23) {
+                System.out.println("HORÁRIO INVÁLIDO, FAVOR INSERIR UM HORÁRIO ENTRE AS 13 E 23 HORAS");
+                horario = sc.nextInt(); }
+
         while (ValidarSala(listSala, nome)) {
             System.out.println("A SALA " + nome + " JÁ ESTÁ CADASTRADA NA LISTA, FAVOR INFORMAR OUTRA: ");
             System.out.print("Nome: ");
@@ -65,7 +71,7 @@ public class Main {
             sc.nextLine();
         }
 
-        listSala.add(new Sala(nome, capacidade));
+        listSala.add(new Sala(nome, capacidade, horario));
     }
 
     public static void cadastrarSessao(){
@@ -102,6 +108,7 @@ public class Main {
                     System.out.println("1-Adcionar filme");
                     System.out.println("2-Deletar um filme");
                     System.out.println("3-Listar filmes");
+                    System.out.println("4-Alterar filme");
                     System.out.println("0-Voltar");
                     opCrud = sc.nextInt();
                     if (opCrud == 1) {
@@ -119,15 +126,47 @@ public class Main {
                         Filme filme = listFilme.stream().filter(x -> x.getNome().equals(filmeRem)).findFirst().orElse(null);
 
                         if (filme == null) {
-                            System.out.println("FILME NÃO ESTÁ CADASTRADO!");
+                            System.out.println("ESTE FILME NÃO ESTÁ CADASTRADO, FAVOR INFORMAR OUTRO!");
                         } else {
                             listFilme.remove(filme);
-                            System.out.println("Filme deletado");
+                            System.out.printf("FILME: '%s' REMOVIDO COM SUCESSO! %n", filmeRem);
                         }
                     }
 
                     if (opCrud == 3) {
                         System.out.println(listFilme);
+                    }
+                    if (opCrud == 4) {
+                        do{
+                            System.out.println("INFORME O NOME DO FILME QUE DESEJA ALTERAR: ");
+                            String filmeAlt = sc.next();
+
+                            Filme filme = listFilme.stream().filter(x -> x.getNome().equals(filmeAlt)).findFirst().orElse(null);
+
+                            if (filme == null) {
+                                System.out.println("ESTE FILME NÃO ESTÁ CADASTRADO, FAVOR INFORMAR OUTRO!");
+                            } else {
+                                System.out.println("INFORME O NOVO NOME: ");
+                                String novoNome = sc.next();
+                                filme.setNome(novoNome);
+                                System.out.println("INFORME O NOVO DIRETOR: ");
+                                String novoDiretor = sc.next();
+                                filme.setDiretor(novoDiretor);
+                                System.out.println("INFORME O NOVO ANO DE LANÇAMENTO: ");
+                                int novoAnoLancamento = sc.nextInt();
+                                filme.setAnoLancamento(novoAnoLancamento);
+                                System.out.println("INFORME O NOVO TIPO: ");
+                                String novoTipo = sc.next();
+                                filme.setTipo(novoTipo);
+                                System.out.println("INFORME A NOVA SINOPSE: ");
+                                String novaSinopse = sc.next();
+                                filme.setSinopse(novaSinopse);
+                                System.out.printf("FILME: '%s' ALTERADO COM SUCESSO! %n", filmeAlt);
+                            }
+
+                            System.out.println("Deseja alterar outro filme? [1]Sim [2]Não");
+                            opList = sc.nextInt();
+                        } while (opList == 1);
                     }
                 }while (opCrud != 0);
 
@@ -151,16 +190,16 @@ public class Main {
 
                     if (opCrud == 2) {
                         do {
-                            System.out.println("INFORME O SALA QUE DESEJA REMOVER: ");
+                            System.out.println("INFORME A SALA QUE DESEJA REMOVER: ");
                             String salaRem = sc.next();
 
                             Sala sala = listSala.stream().filter(x -> x.getNome().equals(salaRem)).findFirst().orElse(null);
 
                             if (sala == null) {
-                                System.out.println("SALA NÃO ESTÁ CADASTRADA!");
+                                System.out.println("ESTA SALA NÃO ESTÁ CADASTRADA, FAVOR INFORMAR OUTRA!");
                             } else {
                                 listSala.remove(sala);
-                                System.out.println("Sala deletada");
+                                System.out.printf("SALA: '%s' REMOVIDA COM SUCESSO! %n", salaRem);
                             }
                             System.out.println("Deseja remover outra sala? [1]Sim [2]Não");
                             opList = sc.nextInt();
@@ -173,20 +212,23 @@ public class Main {
 
                     if (opCrud == 4) {
                         do{
-                        System.out.println("INFORME A SALA QUE DESEJA ALTERAR: ");
+                        System.out.println("INFORME O NOME DA SALA QUE DESEJA ALTERAR: ");
                         String salaAlt = sc.next();
 
                         Sala sala = listSala.stream().filter(x -> x.getNome().equals(salaAlt)).findFirst().orElse(null);
                             if (sala == null) {
-                                System.out.println("SALA NÃO ESTÁ CADASTRADA!");
+                                System.out.println("ESTA SALA NÃO ESTÁ CADASTRADA, FAVOR INFORMAR OUTRA!");
                             } else {
                                 System.out.println("INFORME O NOVO NOME: ");
                                 String novoNome = sc.next();
                                 sala.setNome(novoNome);
                                 System.out.println("INFORME A NOVA CAPACIDADE: ");
-                                String novoCapacidade = sc.next();
-                                sala.setNome(novoCapacidade);
-                                System.out.println("Sala alterada");
+                                int novoCapacidade = sc.nextInt();
+                                sala.setCapacidade(novoCapacidade);
+                                System.out.println("INFORME O NOVO HORARIO: ");
+                                int novoHorario = sc.nextInt();
+                                sala.setHorario(novoHorario);
+                                System.out.printf("SALA: '%s' ALTERADA COM SUCESSO! %n", salaAlt);
                             }
 
                             System.out.println("Deseja alterar outra sala? [1]Sim [2]Não");
