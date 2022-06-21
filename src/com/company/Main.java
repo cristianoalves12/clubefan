@@ -3,11 +3,9 @@ package com.company;
 import com.company.classes.Filme;
 import com.company.classes.Sala;
 import com.company.classes.Sessao;
+import com.company.classes.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
@@ -15,8 +13,10 @@ public class Main {
     static List<Filme> listFilme = new ArrayList<>();
     static List<Sala> listSala = new ArrayList<>();
     static List<Sessao> listSessao = new ArrayList<>();
+    static List<String> listHorarios = Arrays.asList("16:00", "17:00", "18:00", "19:30", "20:00", "22:00", "24:00");
 
     public static void listarFilmes(){
+        System.out.println("Filmes cadastrados:");
         for(Filme filme : listFilme){
             System.out.println((listFilme.indexOf(filme) + 1) + "-" + filme.getNome());
         }
@@ -58,38 +58,44 @@ public class Main {
         sc.nextLine();
         System.out.print("Capacidade: ");
         int capacidade = sc.nextInt();
-        System.out.println("Horário: ");
-        int horario = sc.nextInt();
-            while(horario < 13 || horario > 23) {
-                System.out.println("HORÁRIO INVÁLIDO, FAVOR INSERIR UM HORÁRIO ENTRE AS 13 E 23 HORAS");
-                horario = sc.nextInt(); }
+        sc.nextLine();
 
         while (ValidarSala(listSala, nome)) {
-            System.out.println("A SALA " + nome + " JÁ ESTÁ CADASTRADA NA LISTA, FAVOR INFORMAR OUTRA: ");
+            System.out.println("A SALA " + nome + " JÁ ESTÁ CADASTRADA NA LISTA, FAVOR INFORMAR OUTRO NOME: ");
             System.out.print("Nome: ");
             nome = sc.next();
             sc.nextLine();
         }
 
-        listSala.add(new Sala(nome, capacidade, horario));
+        listSala.add(new Sala(nome, capacidade));
     }
 
     public static void cadastrarSessao(){
         System.out.println("Digite os dados da sessão");
         listarFilmes();
-        System.out.print("Filme: ");
+        System.out.print("Nome do filme: ");
         String nFilme = sc.next();
         sc.nextLine();
         Filme filme = listFilme.stream().filter(x -> x.getNome().equals(nFilme)).findFirst().orElse(null);
+        Utils.printSalas(listSala);
         System.out.print("Sala: ");
-        System.out.println(listSala);
         String nSala = sc.next();
         sc.nextLine();
         Sala sala = listSala.stream().filter(x -> x.getNome().equals(nSala)).findFirst().orElse(null);
+        List<String> horariosDisponiveis = getHorariosLivres(sala);
+        if (horariosDisponiveis.isEmpty()){
+            System.out.println("A sala" + sala.getNome() + "não possui horários disponiveis");
+            return ;
+        }
+        for (String horario : horariosDisponiveis){
+            System.out.println((horariosDisponiveis.indexOf(horario) + 1) + "-" + horario);
+        }
+        System.out.print("O número do horário: ");
+        int nHorario = sc.nextInt();
+        sc.nextLine();
 
-        listSessao.add(new Sessao(filme, sala));
+        listSessao.add(new Sessao(filme, sala, horariosDisponiveis.get(nHorario - 1)));
     }
-
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
@@ -134,7 +140,7 @@ public class Main {
                     }
 
                     if (opCrud == 3) {
-                        System.out.println(listFilme);
+                       Utils.printFilmes(listFilme);
                     }
                     if (opCrud == 4) {
                         do{
@@ -207,7 +213,7 @@ public class Main {
                     }
 
                     if (opCrud == 3) {
-                        System.out.println(listSala);
+                       Utils.printSalas(listSala);
                     }
 
                     if (opCrud == 4) {
@@ -225,9 +231,6 @@ public class Main {
                                 System.out.println("INFORME A NOVA CAPACIDADE: ");
                                 int novoCapacidade = sc.nextInt();
                                 sala.setCapacidade(novoCapacidade);
-                                System.out.println("INFORME O NOVO HORARIO: ");
-                                int novoHorario = sc.nextInt();
-                                sala.setHorario(novoHorario);
                                 System.out.printf("SALA: '%s' ALTERADA COM SUCESSO! %n", salaAlt);
                             }
 
@@ -241,13 +244,30 @@ public class Main {
             }
 
             if (opMenuGeral == 3) {
-                cadastrarSessao();
-                System.out.println(listSessao);
+                do {
+                    System.out.println("1-Adcionar sessão");
+                    System.out.println("2-Listar salas");
+                    System.out.println("0-Voltar");
+                    opCrud = sc.nextInt();
+                    if (opCrud == 1) {
+                        do {
+                            cadastrarSessao();
+                            System.out.println("Deseja adicionar outra sessão? [1]Sim [2]Não");
+                            opList = sc.nextInt();
+                        } while (opList == 1);
+                    }
+
+                    if (opCrud == 2) {
+                        Utils.printSessoes(listSessao);
+                    }
+
+                }while (opCrud != 0);
 
             }
 
         } while (opMenuGeral != 0);
     }
+
     public static boolean ValidarFilme(List<Filme> listFilme, String nome, int anoLanc) {
         Filme filme = listFilme.stream().filter(x -> x.getNome().equals(nome) && x.getAnoLancamento() == anoLanc).findFirst().orElse(null);
         return filme != null;
@@ -257,4 +277,34 @@ public class Main {
         Sala sala = listSala.stream().filter(x -> x.getNome().equals(nome)).findFirst().orElse(null);
         return sala != null;
     }
+
+    public static List<String> getHorariosLivres(Sala sala) {
+        List<Sessao> listSessoes = new ArrayList<>();
+        for (Sessao sessao: listSessao) {
+            if (sessao.getSala().getNome() == sala.getNome()) {
+                listSessoes.add(sessao);
+            }
+        }
+
+        if(listSessoes.isEmpty()) return listHorarios;
+
+
+        List<String> horariosLivres = new ArrayList<>();
+
+
+        for (Sessao sessao : listSessoes) {
+            for (String horario : listHorarios) {
+                if (horario.equals("Indisponivel")) {
+                    break;
+                }
+                if (sessao.getHorario().equals(horario)) {
+                    horariosLivres.add("Indisponivel");
+                } else {
+                    horariosLivres.add(horario);
+                }
+            }
+        }
+        return horariosLivres;
+    }
+
 }

@@ -83,6 +83,6 @@ public class Filme {
                 "Diretor : " + diretor + '\n' +
                 "Ano de lançamento: " + anoLancamento  + '\n' +
                 "Tipo: " + tipo + '\n' +
-                "Sinopse: " + sinopse + '\n' + '\n';
+                "Sinopse: " + sinopse + '\n';
     }
 }
