@@ -6,7 +6,6 @@ import java.util.List;
 public class Filme {
 
     private String nome;
-    private String nomeOriginal;
     private String diretor;
     private int anoLancamento;
     private String tipo;
@@ -20,29 +19,12 @@ public class Filme {
         this.sinopse = sinopse;
     }
 
-    public Filme(String nome, String nomeOriginal, String diretor, int anoLancamento, String tipo, String sinopse) {
-        this.nome = nome;
-        this.nomeOriginal = nomeOriginal;
-        this.diretor = diretor;
-        this.anoLancamento = anoLancamento;
-        this.tipo = tipo;
-        this.sinopse = sinopse;
-    }
-
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getNomeOriginal() {
-        return nomeOriginal;
-    }
-
-    public void setNomeOriginal(String nomeOriginal) {
-        this.nomeOriginal = nomeOriginal;
     }
 
     public String getDiretor() {
